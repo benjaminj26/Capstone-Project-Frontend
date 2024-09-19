@@ -10,7 +10,7 @@ const VendorRegistrationPage = () => {
     vendorLocation: '',
     type: '',
     rate: '',
-    provides: [],
+    images: [], // Add images to state
   });
   const navigate = useNavigate();
 
@@ -30,33 +30,55 @@ const VendorRegistrationPage = () => {
     setVendorDetails((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleImageChange = (e) => {
+    setVendorDetails((prev) => ({
+      ...prev,
+      images: Array.from(e.target.files), // Convert FileList to Array
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Vendor details submitted:', vendorDetails);
+    const formData = new FormData();
+
+    for (const key in vendorDetails) {
+        if (Array.isArray(vendorDetails[key])) {
+            vendorDetails[key].forEach((file) => formData.append(key, file));
+        } else {
+            formData.append(key, vendorDetails[key]);
+        }
+    }
 
     try {
-      const response = await axios.post('http://localhost:9598/vendor/information', vendorDetails);
-
-      if (response.status === 200) {
-        alert('Vendor registered successfully');
-        setVendorDetails({
-          vendorName: '',
-          vendorEmail: '',
-          vendorPhone: '',
-          vendorLocation: '',
-          type: '',
-          rate: '',
-          provides: [],
+        const response = await axios.post('http://localhost:9598/vendor/information', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         });
-        navigate('/');
-      } else {
-        alert('Failed to register vendor');
-      }
+
+        if (response.status === 200) {
+            alert('Vendor registered successfully');
+            setVendorDetails({
+                vendorName: '',
+                vendorEmail: '',
+                vendorPhone: '',
+                vendorLocation: '',
+                type: '',
+                rate: '',
+                provides: [],
+                images: [],
+            });
+            navigate('/');
+        } else {
+            alert('Failed to register vendor');
+        }
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred while registering the vendor');
+        console.error('Error:', error);
+        alert('An error occurred while registering the vendor');
     }
-  };
+};
+
+
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
@@ -142,6 +164,19 @@ const VendorRegistrationPage = () => {
                     onChange={handleInputChange}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     required
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="images" className="block text-sm font-medium text-gray-700">Upload Images</label>
+                  <input
+                    type="file"
+                    id="images"
+                    name="images"
+                    multiple // Allow multiple file uploads
+                    onChange={handleImageChange}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    accept="image/*" // Accept only image files
                   />
                 </div>
                 <div>

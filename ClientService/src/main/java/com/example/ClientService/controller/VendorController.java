@@ -22,7 +22,7 @@ public class VendorController {
     private VendorService vendorService;
 
     @PostMapping("/information")
-    public ResponseEntity<?> addVendorInformation(@RequestBody VendorRegistrationDto vendorRegistrationDto) {
+    public ResponseEntity<?> addVendorInformation(@ModelAttribute VendorRegistrationDto vendorRegistrationDto) {
         try {
             Vendor savedVendor = vendorService.addVendor(vendorRegistrationDto);
             return ResponseEntity.ok(savedVendor);

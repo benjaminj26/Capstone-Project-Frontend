@@ -1,7 +1,10 @@
 package com.example.ClientService.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.ClientService.Exceptions.VendorNotFoundException;
 import com.example.ClientService.Exceptions.VendorServiceException;
+import com.example.ClientService.controller.CloudinaryConfig;
 import com.example.ClientService.dtos.VendorRegistrationDto;
 import com.example.ClientService.model.Vendor;
 import com.example.ClientService.model.VendorStatus;
@@ -12,9 +15,15 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.dao.DataIntegrityViolationException;
 
+import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class VendorService {
@@ -24,17 +33,43 @@ public class VendorService {
     @Autowired
     private VendorRepository vendorRepository;
 
-
+    @Autowired
+    private Cloudinary cloudinary;
     public Vendor addVendor(VendorRegistrationDto vendorRegistrationDto) {
         try {
             Vendor newVendor = appUtils.mapToVendor(vendorRegistrationDto);
+            List<String> imageUrls = new ArrayList<>();
+
+            // Upload images to Cloudinary
+            if (vendorRegistrationDto.getImages() != null && !vendorRegistrationDto.getImages().isEmpty()) {
+                for (MultipartFile imageFile : vendorRegistrationDto.getImages()) {
+                    if (!imageFile.isEmpty()) {
+                        String imageUrl = uploadImageToCloudinary(imageFile);
+                        imageUrls.add(imageUrl);
+                    }
+                }
+            }
+
+            newVendor.setImages(imageUrls);
             return vendorRepository.save(newVendor);
         } catch (DataIntegrityViolationException e) {
             throw new VendorServiceException("Vendor data violates a unique constraint", e);
+        } catch (IllegalArgumentException e) {
+            throw new VendorServiceException("Invalid vendor data provided", e);
         } catch (Exception e) {
             throw new VendorServiceException("An unexpected error occurred while adding a vendor", e);
         }
     }
+
+    public String uploadImageToCloudinary(MultipartFile imageFile) {
+        try {
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(imageFile.getBytes(), ObjectUtils.emptyMap());
+            return (String) uploadResult.get("secure_url");
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload image to Cloudinary", e);
+        }
+    }
+
 
     public List<Vendor> getAvailableVendor(Date date) {
         try {
