@@ -51,6 +51,7 @@ public class VendorService {
             }
 
             newVendor.setImages(imageUrls);
+            newVendor.setStatus(VendorStatus.PENDING);
             return vendorRepository.save(newVendor);
         } catch (DataIntegrityViolationException e) {
             throw new VendorServiceException("Vendor data violates a unique constraint", e);

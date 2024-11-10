@@ -23,5 +23,5 @@ public class Vendor{
     private Float rate;
     private List<Date> bookedDates;
     private List<String> images;
-    private VendorStatus status;
+    private VendorStatus status=VendorStatus.PENDING;
 }
