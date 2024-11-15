@@ -257,6 +257,7 @@ public class EventService {
                 Map<String, Float> vendorMap = new HashMap<>();
                 for(Long vendorId: event.getVendorIds()){
                     Vendor vendor = vendorClient.getVendorById(vendorId).getBody();
+                    System.out.println(vendor);
                     vendorMap.put(vendor.getVendorName(), vendor.getRate());
                     budget+= vendor.getRate();
                 }

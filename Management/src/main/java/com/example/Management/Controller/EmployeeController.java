@@ -49,6 +49,11 @@ public class EmployeeController {
         return ResponseEntity.ok().body(eventService.sendInvoice(eventId));
     }
 
+//    @GetMapping("/order/{eventId}")
+//    public ResponseEntity<FullResponse> mail(@PathVariable("eventId") Long eventId) {
+//        return ResponseEntity.ok().body(eventService.sendOrder(eventId));
+//    }
+
 //    @GetMapping("paymentStatus")
 //    public ResponseEntity<List<Event>> getPaymentStatus(@RequestParam PaymentStatus status) {
 //        return ResponseEntity.ok().body(eventService.getEventsByPaymentStatus(status));
