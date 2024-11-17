@@ -84,7 +84,7 @@ const EventSummaryPage = () => {
       console.error('Error creating event:', error);
     }
   };
-
+// <<<<<<<<<<<<<<<<<------------------------------Mail functions--------------------------------------------------->>>>>>>>>
   const generateInvoice = async (eventId) => {
     try {
       // Construct URL with eventId parameter

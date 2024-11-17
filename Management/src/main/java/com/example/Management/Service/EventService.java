@@ -205,6 +205,7 @@ public class EventService {
                 response.setEmail(vendor.getVendorEmail());
                 StringJoiner joiner = getStringJoiner(response, vendor);
                 senderService.sendSimpleEmail(response.getEmail(), "Purchase Order",joiner.toString());
+                System.out.println("Order function");
                 return response;
             }
             else{
@@ -276,6 +277,7 @@ public class EventService {
             response.setGuestList(event.getGuestList());
             String message =getInvoice(response).toString();
             senderService.sendSimpleEmail(response.getEmail(), "Invoice",message);
+            System.out.println("Invoice function");
             return response;
         }
         else{
