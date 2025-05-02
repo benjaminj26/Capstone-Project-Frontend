@@ -18,7 +18,7 @@ function AdminDashboard() {
 
       try {
         const selectedDay = format(selectedDate, 'yyyy-MM-dd'); // Format the selected date
-        const response = await axios.get(`http://localhost:9598/api/event/eventDate`, {
+        const response = await axios.get(`http://localhost:9598/event/eventDate`, {
           params: { date: selectedDay }
         });
         console.log('Fetched events:', response.data);

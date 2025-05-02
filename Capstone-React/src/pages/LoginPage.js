@@ -20,17 +20,18 @@ const LoginPage = () => {
       // Send POST request to login endpoint with username and password
       const response = await axios.post('http://localhost:9598/auth/login', {
         username,
-        password,
+        password
       });
 
       console.log("Response data:", response.data); // Log entire response data
 
-      const token = response.data; // The response is just the token
+      const token = response.data.token; // The response is just the token
       console.log("Extracted token:", token); // Log extracted token
 
       if (token) {
         // Decode the token to extract user information
         const decodedToken = jwtDecode(token);
+        // const decodedToken = token;
         console.log("Decoded token:", decodedToken); // Log decoded token
 
         const userRole = decodedToken.role; // Adjust according to actual token structure
