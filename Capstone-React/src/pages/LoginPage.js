@@ -23,9 +23,9 @@ const LoginPage = () => {
         password
       });
 
-      console.log("Response data:", response.data); // Log entire response data
+      // console.log("Response data:", response.data); // Log entire response data
 
-      const token = response.data.token; // The response is just the token
+      const token = response.data; // The response is just the token
       console.log("Extracted token:", token); // Log extracted token
 
       if (token) {

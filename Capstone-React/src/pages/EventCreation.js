@@ -21,6 +21,9 @@ const EventCreationPage = () => {
       try {
         const username = localStorage.getItem('username');
         const response = await axios.get(`http://localhost:9598/user/getUser`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          },
           params: { username }
         });
         const userData = response.data;

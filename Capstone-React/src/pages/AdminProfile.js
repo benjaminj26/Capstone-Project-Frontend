@@ -21,7 +21,11 @@ console.log(localStorage);
 
     if (storedUsername) {
       // Fetch user details from the backend
-      axios.get(`http://localhost:9598/user/getUser?username=${storedUsername}`)
+      axios.get(`http://localhost:9598/user/getUser?username=${storedUsername}`,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }
+      })
         .then(response => {
           if (response.data) {
 

@@ -11,7 +11,13 @@ function ApprovalPage() {
   // Function to fetch the vendors
   const fetchVendors = async () => {
     try {
-      const response = await axios.get('http://localhost:9598/vendor/status?status=PENDING');
+      const response = await axios.get('http://localhost:9598/vendor/status', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        },
+        params: { status: 'PENDING' }
+      });
+      console.log(response.data);
       setVendors(response.data);
     } catch (error) {
       console.error('Error fetching vendors:', error);
@@ -79,7 +85,7 @@ function ApprovalPage() {
                     <th className="py-2">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   {vendors.map(vendor => (
                     <tr
                       key={vendor.vendorId}
@@ -114,7 +120,44 @@ function ApprovalPage() {
                       </td>
                     </tr>
                   ))}
+                </tbody> */}
+                <tbody>
+                  {vendors.map(vendor => (
+                    <tr
+                      key={vendor.vendorId || vendor._id || `${vendor.vendorName}-${vendor.vendorEmail}`} // Fallback for key
+                      className="text-center hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleVendorClick(vendor.vendorId)} // Make row clickable
+                    >
+                      <td className="py-2">{vendor.vendorName}</td>
+                      <td className="py-2">{vendor.vendorEmail}</td>
+                      <td className="py-2">{vendor.vendorPhone}</td>
+                      <td className="py-2">{vendor.vendorLocation}</td>
+                      <td className="py-2">{vendor.type}</td>
+                      <td className="py-2">{vendor.rate}</td>
+                      <td className="py-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent triggering vendor click
+                            handleApproval(vendor.vendorId, true);
+                          }}
+                          className="bg-green-500 text-white px-3 py-1 rounded mr-2"
+                        >
+                          ✓
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent triggering vendor click
+                            handleApproval(vendor.vendorId, false);
+                          }}
+                          className="bg-red-500 text-white px-3 py-1 rounded"
+                        >
+                          ✗
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
+
               </table>
             ) : (
               <p>No pending vendors to approve.</p>

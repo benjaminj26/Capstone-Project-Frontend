@@ -18,7 +18,11 @@ function AdminDashboard() {
 
       try {
         const selectedDay = format(selectedDate, 'yyyy-MM-dd'); // Format the selected date
+        // console.log('Auth Token: ', localStorage.getItem('authToken'));
         const response = await axios.get(`http://localhost:9598/event/eventDate`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          },
           params: { date: selectedDay }
         });
         console.log('Fetched events:', response.data);
