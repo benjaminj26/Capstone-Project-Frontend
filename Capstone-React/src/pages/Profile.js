@@ -36,27 +36,32 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col h-screen bg-gray-50">
       <NavBar />
+
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
 
-        {/* User Details Display */}
-        <div className="flex-grow p-10 max-w-4xl mx-auto h-full">
-          <div className="h-full bg-white rounded-lg shadow-lg p-8 flex flex-col justify-center">
-            <h2 className="text-3xl font-bold mb-8 text-gray-800">User Profile</h2>
-            <div className="space-y-6">
-              <div>
-                <label className="block mb-2 text-lg font-medium text-gray-700">Username</label>
-                <p className="text-xl text-gray-800">{userDetails.username}</p>
+        {/* Profile Content Area */}
+        <div className="flex-1 p-8 overflow-auto bg-gray-100">
+          <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">User Profile</h2>
+
+            {/* User Details Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="bg-white p-5 rounded-lg shadow-lg border border-gray-200">
+                <h3 className="text-md font-medium text-gray-700">Username</h3>
+                <p className="text-sm text-gray-800 mt-1">{userDetails.username}</p>
               </div>
-              <div>
-                <label className="block mb-2 text-lg font-medium text-gray-700">Name</label>
-                <p className="text-xl text-gray-800">{userDetails.name}</p>
+
+              <div className="bg-white p-5 rounded-lg shadow-lg border border-gray-200">
+                <h3 className="text-md font-medium text-gray-700">Name</h3>
+                <p className="text-sm text-gray-800 mt-1">{userDetails.name}</p>
               </div>
-              <div>
-                <label className="block mb-2 text-lg font-medium text-gray-700">Email</label>
-                <p className="text-xl text-gray-800">{userDetails.email}</p>
+
+              <div className="bg-white p-5 rounded-lg shadow-lg border border-gray-200">
+                <h3 className="text-md font-medium text-gray-700">Email</h3>
+                <p className="text-sm text-gray-800 mt-1">{userDetails.email}</p>
               </div>
             </div>
           </div>

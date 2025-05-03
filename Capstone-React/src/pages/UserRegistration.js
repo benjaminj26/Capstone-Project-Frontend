@@ -8,7 +8,7 @@ const UserRegistration = () => {
     email: '',
     password: '',
     retypePassword: '',
-    name: '',  // Added name field
+    name: '',
   });
 
   const [error, setError] = useState('');
@@ -20,7 +20,7 @@ const UserRegistration = () => {
   };
 
   const validatePassword = (password) => {
-    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
   };
 
@@ -43,15 +43,12 @@ const UserRegistration = () => {
         username,
         email,
         password,
-        name  // Include name in the request
+        name
       });
 
       if (response.data) {
         alert('Registration successful!');
-        // Store the token if necessary
         localStorage.setItem('token', response.data);
-
-        // Redirect to the landing page
         navigate('/');
       }
     } catch (error) {
@@ -60,79 +57,50 @@ const UserRegistration = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center mb-8">User Registration</h2>
-        {error && <div className="mb-4 text-red-600">{error}</div>}
-        {success && <div className="mb-4 text-green-600">{success}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="retypePassword">Retype Password</label>
-            <input
-              type="password"
-              id="retypePassword"
-              name="retypePassword"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-              value={formData.retypePassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="name">Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+    <div className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-blue-100 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+        <h2 className="text-3xl font-extrabold bg-gradient-to-r from-blue-500 to-cyan-500 text-transparent bg-clip-text text-center mb-6">
+          Eventio Registration
+        </h2>
+
+        {error && <div className="mb-4 text-red-600 font-medium">{error}</div>}
+        {success && <div className="mb-4 text-green-600 font-medium">{success}</div>}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {['username', 'email', 'password', 'retypePassword', 'name'].map((field) => (
+            <div key={field}>
+              <label htmlFor={field} className="block text-sm font-medium text-gray-700 capitalize">
+                {field === 'retypePassword' ? 'Retype Password' : field}
+              </label>
+              <input
+                type={field.includes('password') ? 'password' : 'text'}
+                name={field}
+                id={field}
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={formData[field]}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          ))}
+
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-semibold transition"
           >
             Register
           </button>
         </form>
+
+        <p className="mt-6 text-center text-sm text-gray-600">
+          Already have an account?{' '}
+          <span
+            onClick={() => navigate('/login')}
+            className="text-blue-600 font-medium hover:underline cursor-pointer"
+          >
+            Back to Login
+          </span>
+        </p>
       </div>
     </div>
   );
