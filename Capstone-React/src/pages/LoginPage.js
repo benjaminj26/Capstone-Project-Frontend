@@ -16,7 +16,6 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      // Send POST request to login endpoint with username and password
       const response = await axios.post('http://localhost:9598/auth/login', {
         username,
         password,
@@ -25,16 +24,13 @@ const LoginPage = () => {
       const token = response.data;
 
       if (token) {
-        // Decode the token to extract user information
         const decodedToken = jwtDecode(token);
         const userRole = decodedToken.role;
 
-        // Store the token and user role
         localStorage.setItem('authToken', token);
         localStorage.setItem('userRole', userRole);
         localStorage.setItem('username', username);
 
-        // Redirect based on user role
         if (userRole === 'ADMIN') {
           navigate('/admindashboard');
         } else {
@@ -55,7 +51,6 @@ const LoginPage = () => {
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center mb-8">Login</h2>
         {error && <div className="mb-4 text-red-600">{error}</div>}
-        {loading && <div className="mb-4 text-blue-600">Loading...</div>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 mb-2" htmlFor="username">
@@ -90,7 +85,7 @@ const LoginPage = () => {
             disabled={loading}
             className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-300"
           >
-            Login
+            {loading ? 'Loading...' : 'Login'}
           </button>
           <div className="mt-4 text-center">
             <a href="/forgot-password" className="text-sm text-blue-500 hover:underline">
