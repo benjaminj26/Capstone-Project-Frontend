@@ -79,21 +79,28 @@ const Tutorial = () => {
       </header>
 
       <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-10 font-poppins">Need Ideas?</h1>
-      <div className="flex justify-center mb-10">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder={`Try: ${placeholder}`}
-          className="p-3 border border-gray-300 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-blue-500 w-full max-w-md"
-        />
-        <button
-          onClick={searchVideos}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-r-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <Search size={20} />
-        </button>
-      </div>
+      <form
+  onSubmit={(e) => {
+    e.preventDefault(); // Prevent page reload
+    searchVideos();     // Trigger search
+  }}
+  className="flex justify-center mb-10"
+>
+  <input
+    type="text"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    placeholder={`Try: ${placeholder}`}
+    className="p-3 border border-gray-300 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-blue-500 w-full max-w-md"
+  />
+  <button
+    type="submit"
+    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-r-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <Search size={20} />
+  </button>
+</form>
+
 
       {loading && <p className="text-center text-blue-600 font-medium">Loading...</p>}
 
