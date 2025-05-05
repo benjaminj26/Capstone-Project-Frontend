@@ -25,7 +25,7 @@ function AdminDashboard() {
           },
           params: { date: selectedDay }
         });
-        console.log('Fetched events:', response.data);
+        // console.log('Fetched events:', response.data);
         setEvents({ [selectedDay]: response.data });
       } catch (error) {
         console.error('Error fetching events:', error);

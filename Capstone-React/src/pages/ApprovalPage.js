@@ -17,7 +17,7 @@ function ApprovalPage() {
         },
         params: { status: 'PENDING' }
       });
-      console.log(response.data);
+      // console.log(response.data);
       setVendors(response.data);
     } catch (error) {
       console.error('Error fetching vendors:', error);
@@ -34,11 +34,19 @@ function ApprovalPage() {
     try {
       if (approved) {
         // Approve the vendor
-        await axios.put(`http://localhost:9598/vendor/approveVendor/${vendorId}`);
+        await axios.put(`http://localhost:9598/vendor/approveVendor`, {}, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          },
+          params: { vendorId }
+        });
       } else {
         // Reject (delete) the vendor
         const response = await axios.delete(`http://localhost:9598/vendor`, {
-          params: { id: vendorId }
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+          },
+          params: { vendorId }
         });
         if (response.status === 200) {
           // Refresh the vendors list after approval or rejection
@@ -126,7 +134,7 @@ function ApprovalPage() {
                     <tr
                       key={vendor.vendorId || vendor._id || `${vendor.vendorName}-${vendor.vendorEmail}`} // Fallback for key
                       className="text-center hover:bg-gray-100 cursor-pointer"
-                      onClick={() => handleVendorClick(vendor.vendorId)} // Make row clickable
+                      onClick={() => handleVendorClick(vendor._id)} // Make row clickable
                     >
                       <td className="py-2">{vendor.vendorName}</td>
                       <td className="py-2">{vendor.vendorEmail}</td>
@@ -138,7 +146,7 @@ function ApprovalPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent triggering vendor click
-                            handleApproval(vendor.vendorId, true);
+                            handleApproval(vendor._id, true);
                           }}
                           className="bg-green-500 text-white px-3 py-1 rounded mr-2"
                         >
@@ -147,7 +155,7 @@ function ApprovalPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent triggering vendor click
-                            handleApproval(vendor.vendorId, false);
+                            handleApproval(vendor._id, false);
                           }}
                           className="bg-red-500 text-white px-3 py-1 rounded"
                         >
